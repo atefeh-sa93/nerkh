@@ -53,4 +53,20 @@ parser.stats; // { frames, quotes, rejectedQuotes, invalidFrames, mode: 'worker'
 
 Outcomes: `quotes` (valid quotes, broken ones dropped and counted), `other` (e.g. `subscribed`, `error`), `invalid` (bad JSON or wrong shape; nothing reaches the store). If the worker crashes, the parser switches to the main thread instead of stopping the stream.
 
-Batching per animation frame comes next (#14). Whether the worker is worth it gets measured in #22.
+## Batching per animation frame
+
+The browser paints about 60 times a second. Updating the store on every message (200 a second) would do work that is never seen. The batcher collects quotes and hands them over once per frame, keeping only the newest quote per symbol (an older `updatedAt` never replaces a newer one).
+
+```ts
+import { createQuoteBatcher } from '@nerkh/ws-client';
+
+const batcher = createQuoteBatcher({ onFlush: (quotes) => store.apply(quotes) }); // ≤ 1 call per frame
+// in the parser's onResult:
+if (outcome.kind === 'quotes') batcher.add(outcome.quotes);
+
+batcher.stats; // { received, coalesced, flushes, lastBatchSize }
+```
+
+Uses `requestAnimationFrame` in browsers and a 16 ms timer elsewhere. In a hidden tab the browser pauses frames: nothing is drawn, and since only the latest quote per symbol is held, memory stays bounded until the tab is visible again.
+
+Full path: socket → `createWsClient` → `createMessageParser` (Worker) → `createQuoteBatcher` → store. Whether the Worker and batching are worth it gets measured in #22.
