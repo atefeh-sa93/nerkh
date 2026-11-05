@@ -1,0 +1,52 @@
+/* Generated from tokens.ts by `pnpm --filter @nerkh/ui tokens`. Do not edit by hand. */
+
+:root,
+[data-theme='light'] {
+  color-scheme: light;
+  --nk-bg: #f6f4ef;
+  --nk-surface: #ffffff;
+  --nk-rail: #edeae3;
+  --nk-border: #ddd8ce;
+  --nk-text: #161616;
+  --nk-muted: #4f4a42;
+  --nk-up: #1f63be;
+  --nk-down: #a65200;
+  --nk-live: #1e6b3e;
+  --nk-stale: #4a3c00;
+  --nk-stale-bg: #fff4b8;
+  --nk-focus: #1f63be;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --nk-bg: #131313;
+    --nk-surface: #1c1c1c;
+    --nk-rail: #1a1a1a;
+    --nk-border: #2a2a2a;
+    --nk-text: #f2f0eb;
+    --nk-muted: #c9c5bd;
+    --nk-up: #6fb1ff;
+    --nk-down: #ff9f43;
+    --nk-live: #3ddc84;
+    --nk-stale: #f5d76e;
+    --nk-stale-bg: #3a3410;
+    --nk-focus: #6fb1ff;
+  }
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+  --nk-bg: #131313;
+  --nk-surface: #1c1c1c;
+  --nk-rail: #1a1a1a;
+  --nk-border: #2a2a2a;
+  --nk-text: #f2f0eb;
+  --nk-muted: #c9c5bd;
+  --nk-up: #6fb1ff;
+  --nk-down: #ff9f43;
+  --nk-live: #3ddc84;
+  --nk-stale: #f5d76e;
+  --nk-stale-bg: #3a3410;
+  --nk-focus: #6fb1ff;
+}

@@ -1,0 +1,25 @@
+{
+  "name": "@nerkh/ui",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Design tokens, theme helpers and shared UI components for Nerkh",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tokens.css": "./src/tokens/tokens.css",
+    "./tailwind.css": "./src/tokens/tailwind.css"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "tokens": "node scripts/write-tokens.ts && prettier --write src/tokens/*.css"
+  },
+  "devDependencies": {
+    "@nerkh/config": "workspace:*",
+    "@types/node": "22.20.5",
+    "eslint": "10.14.0",
+    "typescript": "6.0.3",
+    "vitest": "5.1.0"
+  }
+}
