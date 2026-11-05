@@ -2,6 +2,8 @@ export { backoffDelay, DEFAULT_BACKOFF } from './backoff.ts';
 export type { BackoffOptions } from './backoff.ts';
 export { createWsClient } from './client.ts';
 export type { ConnectionStatus, SocketLike, StatusInfo, WsClient, WsClientOptions } from './client.ts';
+export { createQuoteBatcher, defaultFrameScheduler } from './batcher.ts';
+export type { BatcherStats, FrameScheduler, QuoteBatcher, QuoteBatcherOptions } from './batcher.ts';
 export { parseServerMessage } from './parse.ts';
 export type { ParseOutcome } from './parse.ts';
 export { createMessageParser } from './parser.ts';
