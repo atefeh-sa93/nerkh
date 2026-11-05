@@ -1,5 +1,6 @@
 import type { FrameScheduler } from '@nerkh/ws-client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { PriceHistory } from '@/store/history';
 import { createQuotesStore } from '@/store/quotes';
 import { startFeed } from './start-feed';
 
@@ -28,6 +29,24 @@ describe('startFeed (in-browser mock market)', () => {
     // ~200 quotes arrived, but the store updated at most once per 16 ms frame
     expect(state.batches).toBeGreaterThan(0);
     expect(state.batches).toBeLessThanOrEqual(Math.ceil(1000 / 16));
+    stop();
+  });
+
+  it('backfills chart history once per symbol and extends it with live quotes', () => {
+    const store = createQuotesStore();
+    const history = new PriceHistory();
+    const stop = startFeed({
+      symbols: ['BTC-EUR'],
+      actions: store.getState(),
+      history,
+      scheduler: timerScheduler,
+    });
+    const start = Date.now();
+    expect(history.series('BTC-EUR', '1D', start).length).toBeGreaterThan(200); // backfilled day
+    vi.advanceTimersByTime(3000);
+    const latest = history.series('BTC-EUR', '1m', Date.now()).at(-1);
+    expect(latest?.t).toBeGreaterThan(start); // live points appended after the backfill
+    expect(latest?.p).toBe(store.getState().entries['BTC-EUR']?.quote.price);
     stop();
   });
 

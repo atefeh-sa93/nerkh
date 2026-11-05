@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { priceHistory } from '@/store/history';
 import { quoteActions } from '@/store/hooks';
 import { startFeed } from './start-feed';
 
@@ -17,6 +18,7 @@ export function MarketFeed({ symbols }: { symbols: string[] }) {
     return startFeed({
       symbols: key.split(','),
       actions: quoteActions,
+      history: priceHistory,
       ...(wsUrl ? { wsUrl } : {}),
     });
   }, [key]);
