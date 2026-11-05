@@ -11,9 +11,12 @@ function decimalsFor(price: number): number {
 
 const priceFormatters = new Map<number, Intl.NumberFormat>();
 
-/** Price with grouping and magnitude-based decimals, e.g. 63,412.50 or 1.0842. */
-export function formatPrice(price: number): string {
-  const decimals = decimalsFor(price);
+/**
+ * Price with grouping and magnitude-based decimals, e.g. 63,412.50 or 1.0842.
+ * Pass `scale` to format a small amount (a spread) with the decimals of the price it belongs to.
+ */
+export function formatPrice(price: number, scale: number = price): string {
+  const decimals = decimalsFor(scale);
   let formatter = priceFormatters.get(decimals);
   if (!formatter) {
     formatter = new Intl.NumberFormat('en-US', {
