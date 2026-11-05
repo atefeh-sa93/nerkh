@@ -14,6 +14,13 @@ pnpm check        # lint, typecheck and test in every workspace
 pnpm format       # Prettier
 ```
 
+Run the mock price stream (no API keys needed):
+
+```bash
+pnpm --filter @nerkh/mock-server dev   # ws://localhost:4000
+docker compose up                      # same server in Docker
+```
+
 Resource use is capped so checks don't take over a laptop: Turbo runs at most 2 tasks at once (`--concurrency=2`) and Vitest uses at most 2 workers (`@nerkh/config/vitest`). To test one package only: `pnpm --filter @nerkh/data test`.
 
 ## Layout
