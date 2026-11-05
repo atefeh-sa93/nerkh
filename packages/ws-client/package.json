@@ -1,0 +1,21 @@
+{
+  "name": "@nerkh/ws-client",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Framework-agnostic WebSocket client with reconnect, exponential backoff and jitter",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@nerkh/config": "workspace:*",
+    "eslint": "10.14.0",
+    "typescript": "6.0.3",
+    "vitest": "5.1.0"
+  }
+}
