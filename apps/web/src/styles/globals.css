@@ -1,0 +1,36 @@
+@import 'tailwindcss';
+@import '@nerkh/ui/tokens.css';
+@import '@nerkh/ui/tailwind.css';
+
+/* Shared components live in packages/ui; let Tailwind see their classes. */
+@source '../../../../packages/ui/src';
+
+@theme {
+  --font-sans: 'Space Grotesk Variable', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-fa: 'Vazirmatn Variable', Tahoma, sans-serif;
+}
+
+html {
+  background: var(--nk-bg);
+  color: var(--nk-text);
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+}
+
+:focus-visible {
+  outline: 2px solid var(--nk-focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
