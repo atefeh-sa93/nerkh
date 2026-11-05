@@ -33,4 +33,24 @@ client.close(); // "Pause stream": stays stopped until connect()
 
 Delay before retry _n_ = `min(maxDelayMs, initialDelayMs × factor^(n−1))`, spread by ±`jitter` so many clients dropped at once don't all return at the same moment. Defaults: 1 s, ×2, capped at 30 s, ±30 %, 10 retries. A successful open resets the count.
 
-Parsing in a Web Worker (#13) and batching per animation frame (#14) build on this client.
+## Parsing off the main thread
+
+Every frame is JSON-parsed and validated with the `@nerkh/data` Zod schema before it reaches the app. At ~200 frames a second that work runs in a Web Worker, so it doesn't compete with rendering.
+
+```ts
+import { createMessageParser, createParserWorker } from '@nerkh/ws-client';
+
+const parser = createMessageParser({
+  worker: createParserWorker(), // null in Node or without Worker support → parses on the main thread
+  onResult: (outcome) => {
+    if (outcome.kind === 'quotes') store.add(outcome.quotes); // only valid quotes
+  },
+});
+client.on('message', (raw) => parser.parse(raw));
+
+parser.stats; // { frames, quotes, rejectedQuotes, invalidFrames, mode: 'worker' | 'main-thread' }
+```
+
+Outcomes: `quotes` (valid quotes, broken ones dropped and counted), `other` (e.g. `subscribed`, `error`), `invalid` (bad JSON or wrong shape; nothing reaches the store). If the worker crashes, the parser switches to the main thread instead of stopping the stream.
+
+Batching per animation frame comes next (#14). Whether the worker is worth it gets measured in #22.
