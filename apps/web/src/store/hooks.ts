@@ -23,6 +23,8 @@ export const useQuoteEntry = (symbol: string) => useStore(quotesStore, selectEnt
 /** The list of symbols; changes only when a new symbol appears. */
 export const useSymbols = () => useStore(quotesStore, selectSymbols);
 export const useSelectedSymbol = () => useStore(quotesStore, selectSelected);
+/** True for one row only, so changing the selection re-renders two rows, not all. */
+export const useIsSelected = (symbol: string) => useStore(quotesStore, (s) => s.selected === symbol);
 /** The selected symbol's entry, for the chart and order book. */
 export const useSelectedEntry = () => useStore(quotesStore, selectSelectedEntry);
 export const useConnection = () => useStore(quotesStore, selectConnection);

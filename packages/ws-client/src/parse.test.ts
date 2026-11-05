@@ -125,6 +125,65 @@ describe('createMessageParser: with a worker', () => {
   });
 });
 
+/** A worker whose script never loaded: accepts messages, never answers, never errors. */
+class DeadWorker implements WorkerLike {
+  posted = 0;
+  terminated = false;
+  onmessage: WorkerLike['onmessage'] = null;
+  onerror: WorkerLike['onerror'] = null;
+  postMessage() {
+    this.posted++;
+  }
+  terminate() {
+    this.terminated = true;
+  }
+}
+
+describe('createMessageParser: a worker that never answers', () => {
+  afterEach(() => vi.useRealTimers());
+
+  it('gives up after the timeout and re-parses everything it was handed', () => {
+    vi.useFakeTimers();
+    const worker = new DeadWorker();
+    const results: ParseOutcome[] = [];
+    const parser = createMessageParser({ worker, onResult: (o) => results.push(o), workerTimeoutMs: 3000 });
+
+    parser.parse(frame([btc]));
+    parser.parse(frame([{ ...btc, price: 2 }]));
+    vi.advanceTimersByTime(2999);
+    expect(results).toHaveLength(0);
+
+    vi.advanceTimersByTime(1);
+    expect(worker.terminated).toBe(true);
+    expect(parser.stats.mode).toBe('main-thread');
+    expect(results.map((r) => r.kind === 'quotes' && r.quotes[0]?.price)).toEqual([63412.5, 2]);
+
+    parser.parse(frame([btc])); // from now on, inline
+    expect(results).toHaveLength(3);
+  });
+
+  it('a worker that errors after receiving frames still loses none of them', () => {
+    const worker = new DeadWorker();
+    const results: ParseOutcome[] = [];
+    const parser = createMessageParser({ worker, onResult: (o) => results.push(o) });
+    parser.parse(frame([btc]));
+    worker.onerror?.(new Error('script failed to load'));
+    expect(results).toHaveLength(1);
+    expect(parser.stats.mode).toBe('main-thread');
+  });
+
+  it('a worker that answers in time is kept', async () => {
+    vi.useFakeTimers();
+    const worker = new FakeWorker();
+    const parser = createMessageParser({ worker, onResult: () => undefined, workerTimeoutMs: 3000 });
+    parser.parse(frame([btc]));
+    await Promise.resolve();
+    vi.advanceTimersByTime(10_000);
+    expect(worker.terminated).toBe(false);
+    expect(parser.stats.mode).toBe('worker');
+  });
+});
+
 describe('worker entry (worker.ts)', () => {
   const scope = globalThis as unknown as {
     onmessage: ((e: { data: WorkerRequest }) => void) | null;
