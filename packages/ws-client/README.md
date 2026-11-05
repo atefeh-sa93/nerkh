@@ -38,7 +38,8 @@ Delay before retry _n_ = `min(maxDelayMs, initialDelayMs × factor^(n−1))`, sp
 Every frame is JSON-parsed and validated with the `@nerkh/data` Zod schema before it reaches the app. At ~200 frames a second that work runs in a Web Worker, so it doesn't compete with rendering.
 
 ```ts
-import { createMessageParser, createParserWorker } from '@nerkh/ws-client';
+import { createMessageParser } from '@nerkh/ws-client';
+import { createParserWorker } from '@nerkh/ws-client/browser'; // browser-only entry
 
 const parser = createMessageParser({
   worker: createParserWorker(), // null in Node or without Worker support → parses on the main thread

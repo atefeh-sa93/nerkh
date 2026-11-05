@@ -5,7 +5,8 @@
   "description": "Framework-agnostic WebSocket client with reconnect, exponential backoff and jitter",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./browser": "./src/browser.ts"
   },
   "scripts": {
     "lint": "eslint .",

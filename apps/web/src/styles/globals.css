@@ -9,6 +9,27 @@
   --font-sans: 'Space Grotesk Variable', system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
   --font-fa: 'Vazirmatn Variable', Tahoma, sans-serif;
+
+  /* Short highlight when a price changes. Off with prefers-reduced-motion (below). */
+  --animate-flash-up: flash-up 700ms ease-out;
+  --animate-flash-down: flash-down 700ms ease-out;
+
+  @keyframes flash-up {
+    from {
+      background-color: color-mix(in srgb, var(--nk-up) 30%, transparent);
+    }
+    to {
+      background-color: transparent;
+    }
+  }
+  @keyframes flash-down {
+    from {
+      background-color: color-mix(in srgb, var(--nk-down) 30%, transparent);
+    }
+    to {
+      background-color: transparent;
+    }
+  }
 }
 
 html {

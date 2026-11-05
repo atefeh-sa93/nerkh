@@ -8,5 +8,4 @@ export { parseServerMessage } from './parse.ts';
 export type { ParseOutcome } from './parse.ts';
 export { createMessageParser } from './parser.ts';
 export type { MessageParser, MessageParserOptions, ParserStats, WorkerLike } from './parser.ts';
-export { createParserWorker } from './default-worker.ts';
 export type { WorkerRequest, WorkerResponse } from './worker.ts';
