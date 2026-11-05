@@ -24,4 +24,8 @@ packages/    # config, data, ws-client, ui, persian-kit
 docs/adr/    # architecture decision records
 ```
 
+## Decisions
+
+Why things are built the way they are: [docs/adr](docs/adr/README.md), starting with [001 · why a monorepo](docs/adr/001-monorepo.md).
+
 Out of scope by design: trading, user accounts and wallets. Nerkh only displays prices.
