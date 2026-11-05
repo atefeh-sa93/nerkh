@@ -1,0 +1,12 @@
+**/node_modules
+**/.turbo
+**/dist
+**/.next
+**/coverage
+**/storybook-static
+**/playwright-report
+**/test-results
+.git
+.github
+.env
+.env.*

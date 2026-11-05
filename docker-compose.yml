@@ -1,0 +1,15 @@
+# One command, no API keys: `docker compose up`
+# The dashboard joins this file in a later issue.
+services:
+  mock-server:
+    build:
+      context: .
+      dockerfile: apps/mock-server/Dockerfile
+    ports:
+      - '4000:4000'
+    environment:
+      SEED: '42'
+      RATE: '200'
+      # Drop every connection every 30 s to watch the client reconnect:
+      # DROP_EVERY_MS: '30000'
+    restart: unless-stopped

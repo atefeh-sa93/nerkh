@@ -44,3 +44,23 @@ jobs:
       - run: pnpm format:check
 
       - run: pnpm check
+
+  mock-server-image:
+    name: Mock server Docker image
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Build image
+        run: docker build -f apps/mock-server/Dockerfile -t nerkh-mock-server .
+
+      - name: Start container and check /health
+        run: |
+          docker run -d --name mock -p 4000:4000 nerkh-mock-server
+          for i in $(seq 1 20); do
+            if curl -fsS http://127.0.0.1:4000/health; then echo; exit 0; fi
+            sleep 1
+          done
+          docker logs mock
+          exit 1
