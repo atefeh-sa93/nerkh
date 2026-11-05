@@ -45,6 +45,14 @@ jobs:
 
       - run: pnpm check
 
+      - name: Build the dashboard (static export, as on GitHub Pages)
+        run: pnpm turbo run build --filter=@nerkh/web --concurrency=2
+        env:
+          NEXT_PUBLIC_BASE_PATH: /nerkh
+
+      - name: Check both pages were exported
+        run: test -f apps/web/out/index.html && test -f apps/web/out/fa/index.html
+
   mock-server-image:
     name: Mock server Docker image
     runs-on: ubuntu-latest
