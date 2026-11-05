@@ -11,7 +11,8 @@
     "./eslint": "./eslint.config.js",
     "./eslint/package": "./eslint/package.js",
     "./eslint/agnostic": "./eslint/agnostic.js",
-    "./prettier": "./prettier.config.js"
+    "./prettier": "./prettier.config.js",
+    "./vitest": "./vitest.config.js"
   },
   "scripts": {
     "lint": "eslint ."

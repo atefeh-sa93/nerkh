@@ -5,15 +5,15 @@
   "license": "MIT",
   "packageManager": "pnpm@12.16.1",
   "engines": {
-    "node": ">=22.12"
+    "node": ">=22.18"
   },
   "scripts": {
-    "build": "turbo run build",
+    "build": "turbo run build --concurrency=2",
     "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "typecheck": "turbo run typecheck",
-    "test": "turbo run test",
-    "check": "turbo run lint typecheck test",
+    "lint": "turbo run lint --concurrency=2",
+    "typecheck": "turbo run typecheck --concurrency=2",
+    "test": "turbo run test --concurrency=2",
+    "check": "turbo run lint typecheck test --concurrency=2",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },

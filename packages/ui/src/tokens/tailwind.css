@@ -1,0 +1,16 @@
+/* Generated from tokens.ts by `pnpm --filter @nerkh/ui tokens`. Do not edit by hand. */
+
+@theme inline {
+  --color-bg: var(--nk-bg);
+  --color-surface: var(--nk-surface);
+  --color-rail: var(--nk-rail);
+  --color-border: var(--nk-border);
+  --color-text: var(--nk-text);
+  --color-muted: var(--nk-muted);
+  --color-up: var(--nk-up);
+  --color-down: var(--nk-down);
+  --color-live: var(--nk-live);
+  --color-stale: var(--nk-stale);
+  --color-stale-bg: var(--nk-stale-bg);
+  --color-focus: var(--nk-focus);
+}

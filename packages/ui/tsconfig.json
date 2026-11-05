@@ -1,0 +1,8 @@
+{
+  "extends": "@nerkh/config/tsconfig/react.json",
+  "compilerOptions": {
+    // Tests read the generated CSS files from disk.
+    "types": ["node"]
+  },
+  "include": ["src"]
+}

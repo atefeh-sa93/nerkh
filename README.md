@@ -6,13 +6,15 @@ Real-time market dashboard (Global + Iran) in a Turborepo monorepo: Next.js, Lit
 
 ## Quick start
 
-Requires Node 22.12+ and pnpm (via `corepack enable`).
+Requires Node 22.18+ and pnpm (via `corepack enable`).
 
 ```bash
 pnpm install
 pnpm check        # lint, typecheck and test in every workspace
 pnpm format       # Prettier
 ```
+
+Resource use is capped so checks don't take over a laptop: Turbo runs at most 2 tasks at once (`--concurrency=2`) and Vitest uses at most 2 workers (`@nerkh/config/vitest`). To test one package only: `pnpm --filter @nerkh/data test`.
 
 ## Layout
 
