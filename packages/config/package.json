@@ -9,6 +9,8 @@
     "./tsconfig/library.json": "./tsconfig/library.json",
     "./tsconfig/react.json": "./tsconfig/react.json",
     "./eslint": "./eslint.config.js",
+    "./eslint/package": "./eslint/package.js",
+    "./eslint/agnostic": "./eslint/agnostic.js",
     "./prettier": "./prettier.config.js"
   },
   "scripts": {
