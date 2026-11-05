@@ -2,6 +2,8 @@ export { createMockAdapter, createMockQuoteGenerator, MOCK_SOURCE_ID } from './a
 export type { MockAdapterOptions, MockOptions, MockQuoteGenerator } from './adapter.ts';
 export { createMockHistory } from './history.ts';
 export type { MockHistoryOptions, PricePoint } from './history.ts';
+export { createMockOrderBook } from './orderbook.ts';
+export type { BookLevel, MockOrderBookOptions, OrderBook } from './orderbook.ts';
 export { createSeededRandom } from './random.ts';
 export { MOCK_SYMBOLS } from './symbols.ts';
 export type { MockSymbol } from './symbols.ts';

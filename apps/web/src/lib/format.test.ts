@@ -8,6 +8,11 @@ describe('formatPrice', () => {
     expect(formatPrice(1.0842)).toBe('1.0842');
     expect(formatPrice(0.5)).toBe('0.5000');
   });
+
+  it('formats a small amount with the decimals of a reference price', () => {
+    expect(formatPrice(0.04, 213.95)).toBe('0.04');
+    expect(formatPrice(0.0002, 1.0842)).toBe('0.0002');
+  });
 });
 
 describe('formatChange', () => {
