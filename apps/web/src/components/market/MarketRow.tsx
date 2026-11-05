@@ -40,7 +40,7 @@ export const MarketRow = memo(function MarketRow({ symbol }: { symbol: string })
           className="flex min-h-11 w-full flex-col items-start justify-center px-2 py-1.5 text-start"
         >
           <span className="font-semibold whitespace-nowrap">{quote.symbol}</span>
-          <span className="font-mono text-[11px] text-muted">{quote.source}</span>
+          <span className="font-mono text-[11px] whitespace-nowrap text-muted">{quote.source}</span>
         </button>
       </th>
 
