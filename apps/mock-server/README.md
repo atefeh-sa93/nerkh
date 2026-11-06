@@ -9,13 +9,14 @@ docker compose up                          # from the repo root
 
 ## Settings (environment variables)
 
-| Variable        | Default   | Meaning                                                   |
-| --------------- | --------- | --------------------------------------------------------- |
-| `PORT`          | `4000`    | HTTP and WebSocket port                                   |
-| `HOST`          | `0.0.0.0` | Interface to listen on                                    |
-| `SEED`          | `42`      | Same seed, same market                                    |
-| `RATE`          | `200`     | Quotes generated per second across all symbols            |
-| `DROP_EVERY_MS` | off       | Close every connection on this interval to test reconnect |
+| Variable        | Default   | Meaning                                                               |
+| --------------- | --------- | --------------------------------------------------------------------- |
+| `PORT`          | `4000`    | HTTP and WebSocket port                                               |
+| `HOST`          | `0.0.0.0` | Interface to listen on                                                |
+| `SEED`          | `42`      | Same seed, same market                                                |
+| `RATE`          | `200`     | Quotes generated per second across all symbols                        |
+| `TICK_MS`       | `50`      | Frame interval: 50 bundles ~10 quotes per frame, 5 sends ~1 per frame |
+| `DROP_EVERY_MS` | off       | Close every connection on this interval to test reconnect             |
 
 ## Protocol (JSON text frames)
 

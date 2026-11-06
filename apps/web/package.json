@@ -9,7 +9,8 @@
     "build": "next build",
     "lint": "eslint .",
     "typecheck": "tsc -p tsconfig.json",
-    "test": "vitest run"
+    "test": "vitest run",
+    "bench": "NEXT_PUBLIC_WS_URL=ws://127.0.0.1:4517 next build --profile && node scripts/bench.ts"
   },
   "dependencies": {
     "@fontsource-variable/space-grotesk": "5.3.0",
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "@nerkh/config": "workspace:*",
+    "@playwright/test": "1.64.1",
     "@tailwindcss/postcss": "4.3.4",
     "@types/d3-scale": "4.0.9",
     "@types/d3-shape": "3.2.0",

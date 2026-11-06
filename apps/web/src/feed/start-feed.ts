@@ -26,6 +26,13 @@ export interface FeedOptions {
   onReceived?: (quotes: Quote[]) => void;
   /** Called when the connection comes back after a drop. */
   onReconnected?: () => void;
+  /**
+   * Off: every quote goes to the store on its own, the moment it arrives.
+   * Only for measuring what batching saves (ADR-002). Default true.
+   */
+  batching?: boolean;
+  /** Off: parse on the main thread even where Workers exist. For measuring (ADR-002). Default true. */
+  useWorker?: boolean;
   /** Injected in tests. */
   scheduler?: FrameScheduler;
 }
@@ -53,19 +60,20 @@ export function startFeed({
   history,
   onReceived,
   onReconnected,
+  batching = true,
+  useWorker = true,
   scheduler,
 }: FeedOptions): () => void {
   if (history) backfill(history, symbols, Date.now());
-  const batcher = createQuoteBatcher({
-    onFlush: (quotes) => {
-      actions.applyBatch(quotes);
-      history?.append(quotes);
-    },
-    ...(scheduler ? { scheduler } : {}),
-  });
+  const apply = (quotes: Quote[]) => {
+    actions.applyBatch(quotes);
+    history?.append(quotes);
+  };
+  const batcher = createQuoteBatcher({ onFlush: apply, ...(scheduler ? { scheduler } : {}) });
   const receive = (quotes: Quote[]) => {
     onReceived?.(quotes);
-    batcher.add(quotes);
+    if (batching) batcher.add(quotes);
+    else for (const quote of quotes) apply([quote]);
   };
 
   if (!wsUrl) {
@@ -81,7 +89,7 @@ export function startFeed({
   }
 
   const parser = createMessageParser({
-    worker: createParserWorker(),
+    worker: useWorker ? createParserWorker() : null,
     onResult: (outcome) => {
       if (outcome.kind === 'quotes') receive(outcome.quotes);
     },

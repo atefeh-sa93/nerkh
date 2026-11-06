@@ -1,0 +1,113 @@
+{
+  "date": "2026-11-06T05:44:32.385Z",
+  "machine": "darwin · Apple M2 × 8 · 8 GB · headless Chromium · 2 runs each (median)",
+  "results": [
+    {
+      "scenario": "bundled (20 frames/s)",
+      "label": "batching + worker",
+      "messagesPerSec": 105,
+      "commitsPerSec": 24.5,
+      "renderMsPerSec": 17.2,
+      "avgCommitMs": 0.7,
+      "fps": 60,
+      "slowFramesPerSec": 0.1,
+      "longTaskMsPerSec": 0
+    },
+    {
+      "scenario": "bundled (20 frames/s)",
+      "label": "no batching",
+      "messagesPerSec": 102,
+      "commitsPerSec": 24.1,
+      "renderMsPerSec": 16.9,
+      "avgCommitMs": 0.72,
+      "fps": 60,
+      "slowFramesPerSec": 0,
+      "longTaskMsPerSec": 0
+    },
+    {
+      "scenario": "bundled (20 frames/s)",
+      "label": "no worker",
+      "messagesPerSec": 106,
+      "commitsPerSec": 23.9,
+      "renderMsPerSec": 13.6,
+      "avgCommitMs": 0.58,
+      "fps": 60,
+      "slowFramesPerSec": 0,
+      "longTaskMsPerSec": 0
+    },
+    {
+      "scenario": "one quote per frame (~200 frames/s)",
+      "label": "batching + worker",
+      "messagesPerSec": 95,
+      "commitsPerSec": 59.6,
+      "renderMsPerSec": 14.6,
+      "avgCommitMs": 0.25,
+      "fps": 60,
+      "slowFramesPerSec": 0,
+      "longTaskMsPerSec": 0
+    },
+    {
+      "scenario": "one quote per frame (~200 frames/s)",
+      "label": "no batching",
+      "messagesPerSec": 93,
+      "commitsPerSec": 97.5,
+      "renderMsPerSec": 12.1,
+      "avgCommitMs": 0.12,
+      "fps": 60.1,
+      "slowFramesPerSec": 0,
+      "longTaskMsPerSec": 0
+    },
+    {
+      "scenario": "one quote per frame (~200 frames/s)",
+      "label": "no worker",
+      "messagesPerSec": 92,
+      "commitsPerSec": 57,
+      "renderMsPerSec": 13.2,
+      "avgCommitMs": 0.23,
+      "fps": 60,
+      "slowFramesPerSec": 0,
+      "longTaskMsPerSec": 0
+    },
+    {
+      "scenario": "stress: 1000 quotes/s, one per frame",
+      "label": "batching + worker",
+      "messagesPerSec": 451,
+      "commitsPerSec": 64.3,
+      "renderMsPerSec": 28.2,
+      "avgCommitMs": 0.44,
+      "fps": 60,
+      "slowFramesPerSec": 0,
+      "longTaskMsPerSec": 0
+    },
+    {
+      "scenario": "stress: 1000 quotes/s, one per frame",
+      "label": "no batching",
+      "messagesPerSec": 452,
+      "commitsPerSec": 456.1,
+      "renderMsPerSec": 33.2,
+      "avgCommitMs": 0.07,
+      "fps": 60,
+      "slowFramesPerSec": 0.1,
+      "longTaskMsPerSec": 0
+    },
+    {
+      "scenario": "stress: 1000 quotes/s, one per frame",
+      "label": "no worker",
+      "messagesPerSec": 460,
+      "commitsPerSec": 64.1,
+      "renderMsPerSec": 22.9,
+      "avgCommitMs": 0.36,
+      "fps": 60,
+      "slowFramesPerSec": 0.1,
+      "longTaskMsPerSec": 0
+    }
+  ],
+  "parse": {
+    "bundled": {
+      "usPerFrame": 10
+    },
+    "single": {
+      "usPerFrame": 2
+    }
+  }
+}

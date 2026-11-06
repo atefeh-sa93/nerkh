@@ -15,6 +15,9 @@ const server = await startMockServer({
   host: process.env.HOST ?? '0.0.0.0',
   seed: intFromEnv('SEED', 42),
   messagesPerSecond: intFromEnv('RATE', 200),
+  // How often a frame is sent. 50 ms bundles several quotes per frame; 5 ms
+  // sends about one quote per frame, like many real exchange feeds.
+  tickMs: intFromEnv('TICK_MS', 50),
   dropEveryMs: intFromEnv('DROP_EVERY_MS'),
 });
 

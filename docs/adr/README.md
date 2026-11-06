@@ -2,13 +2,13 @@
 
 Each ADR records one decision: the problem, what we chose, what we rejected and what it costs. ADRs are not edited after they are accepted; a later ADR supersedes an earlier one.
 
-| #                      | Decision                                             | Status        |
-| ---------------------- | ---------------------------------------------------- | ------------- |
-| [001](001-monorepo.md) | One Turborepo + pnpm monorepo for all apps           | Accepted      |
-| 002                    | Batch updates per animation frame, parse in a Worker | Planned (#22) |
-| 003                    | Store Iranian prices in rial, show toman             | Planned (#25) |
-| 004                    | Stream and periodic data are shown differently       | Planned (#28) |
-| 005                    | Three run modes: mock, snapshot, live                | Planned (#3)  |
+| #                                 | Decision                                             | Status        |
+| --------------------------------- | ---------------------------------------------------- | ------------- |
+| [001](001-monorepo.md)            | One Turborepo + pnpm monorepo for all apps           | Accepted      |
+| [002](002-batching-and-worker.md) | Batch updates per animation frame, parse in a Worker | Accepted      |
+| 003                               | Store Iranian prices in rial, show toman             | Planned (#25) |
+| 004                               | Stream and periodic data are shown differently       | Planned (#28) |
+| 005                               | Three run modes: mock, snapshot, live                | Planned (#3)  |
 
 ## Template
 
