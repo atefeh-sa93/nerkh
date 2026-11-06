@@ -64,6 +64,23 @@ describe('startFeed (in-browser mock market)', () => {
     stop();
   });
 
+  it('without batching, every quote becomes its own store update (for measuring only)', () => {
+    const batched = createQuotesStore();
+    const unbatched = createQuotesStore();
+    const stopA = startFeed({ symbols: ['BTC-EUR'], actions: batched.getState(), scheduler: timerScheduler });
+    const stopB = startFeed({
+      symbols: ['BTC-EUR'],
+      actions: unbatched.getState(),
+      batching: false,
+      scheduler: timerScheduler,
+    });
+    vi.advanceTimersByTime(1000);
+    expect(unbatched.getState().batches).toBe(200); // one per quote
+    expect(batched.getState().batches).toBeLessThanOrEqual(Math.ceil(1000 / 16));
+    stopA();
+    stopB();
+  });
+
   it('stop() ends updates and marks the feed paused', () => {
     const store = createQuotesStore();
     const stop = startFeed({ symbols: ['BTC-EUR'], actions: store.getState(), scheduler: timerScheduler });

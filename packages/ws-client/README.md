@@ -70,4 +70,4 @@ batcher.stats; // { received, coalesced, flushes, lastBatchSize }
 
 Uses `requestAnimationFrame` in browsers and a 16 ms timer elsewhere. In a hidden tab the browser pauses frames: nothing is drawn, and since only the latest quote per symbol is held, memory stays bounded until the tab is visible again.
 
-Full path: socket → `createWsClient` → `createMessageParser` (Worker) → `createQuoteBatcher` → store. Whether the Worker and batching are worth it gets measured in #22.
+Full path: socket → `createWsClient` → `createMessageParser` (Worker) → `createQuoteBatcher` → store. What the Worker and batching actually save is measured in [ADR-002](../../docs/adr/002-batching-and-worker.md).

@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useStore } from 'zustand';
+import { parseBenchFlags } from '@/lib/bench-flags';
 import { feedStore, rateCounter, type SecondState } from '@/store/feed';
 import { priceHistory } from '@/store/history';
 import { quoteActions } from '@/store/hooks';
@@ -32,12 +33,15 @@ export function MarketFeed({ symbols }: { symbols: string[] }) {
       quoteActions.setConnection({ status: 'paused', attempt: 0 });
       return;
     }
+    const flags = parseBenchFlags(window.location.search);
     return startFeed({
       symbols: key.split(','),
       actions: quoteActions,
       history: priceHistory,
       onReceived: (quotes) => rateCounter.add(quotes),
       onReconnected: () => feedStore.getState().noteReconnect(),
+      batching: flags.batching,
+      useWorker: flags.worker,
       ...(WS_URL ? { wsUrl: WS_URL } : {}),
     });
   }, [key, paused]);
