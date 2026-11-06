@@ -27,6 +27,14 @@ describe('chartGeometry', () => {
     }
   });
 
+  it('breaks the line where data is missing (e.g. while paused)', () => {
+    const steady = Array.from({ length: 10 }, (_, i) => ({ t: i * 1000, p: 100 + i }));
+    const resumed = Array.from({ length: 10 }, (_, i) => ({ t: 60_000 + i * 1000, p: 120 + i }));
+    const path = chartGeometry([...steady, ...resumed])?.path ?? '';
+    expect(path.match(/M/g)).toHaveLength(2); // two separate segments
+    expect(chartGeometry(steady)?.path.match(/M/g)).toHaveLength(1);
+  });
+
   it('handles a single point or a flat line without dividing by zero', () => {
     expect(chartGeometry([{ t: 5, p: 42 }])?.end.yPct).toBeCloseTo(50, 5);
     expect(chartGeometry([])).toBeNull();

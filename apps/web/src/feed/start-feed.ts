@@ -1,4 +1,4 @@
-import { createMockAdapter, createMockHistory } from '@nerkh/data';
+import { createMockAdapter, createMockHistory, type Quote } from '@nerkh/data';
 import {
   createMessageParser,
   createQuoteBatcher,
@@ -22,6 +22,10 @@ export interface FeedOptions {
   wsUrl?: string;
   /** Chart history: backfilled for each symbol, then extended with every batch. */
   history?: PriceHistory;
+  /** Called with every batch of quotes as it arrives, before batching (for the rate meter). */
+  onReceived?: (quotes: Quote[]) => void;
+  /** Called when the connection comes back after a drop. */
+  onReconnected?: () => void;
   /** Injected in tests. */
   scheduler?: FrameScheduler;
 }
@@ -42,7 +46,15 @@ function backfill(history: PriceHistory, symbols: readonly string[], now: number
  * Wires a data source to the store: source → (parser) → per-frame batcher →
  * store.applyBatch (+ chart history). Returns a stop function that tears everything down.
  */
-export function startFeed({ symbols, actions, wsUrl, history, scheduler }: FeedOptions): () => void {
+export function startFeed({
+  symbols,
+  actions,
+  wsUrl,
+  history,
+  onReceived,
+  onReconnected,
+  scheduler,
+}: FeedOptions): () => void {
   if (history) backfill(history, symbols, Date.now());
   const batcher = createQuoteBatcher({
     onFlush: (quotes) => {
@@ -51,12 +63,16 @@ export function startFeed({ symbols, actions, wsUrl, history, scheduler }: FeedO
     },
     ...(scheduler ? { scheduler } : {}),
   });
+  const receive = (quotes: Quote[]) => {
+    onReceived?.(quotes);
+    batcher.add(quotes);
+  };
 
   if (!wsUrl) {
     const adapter = createMockAdapter({ seed: Date.now() % 100_000 });
     const connected: StatusInfo = { status: 'connected', attempt: 0 };
     actions.setConnection(connected);
-    const unsubscribe = adapter.subscribe?.(symbols, (quotes) => batcher.add(quotes)) ?? (() => undefined);
+    const unsubscribe = adapter.subscribe?.(symbols, receive) ?? (() => undefined);
     return () => {
       unsubscribe();
       batcher.stop();
@@ -67,11 +83,14 @@ export function startFeed({ symbols, actions, wsUrl, history, scheduler }: FeedO
   const parser = createMessageParser({
     worker: createParserWorker(),
     onResult: (outcome) => {
-      if (outcome.kind === 'quotes') batcher.add(outcome.quotes);
+      if (outcome.kind === 'quotes') receive(outcome.quotes);
     },
   });
   const client = createWsClient({ url: wsUrl });
   client.on('status', actions.setConnection);
+  client.on('open', ({ reconnected }) => {
+    if (reconnected) onReconnected?.();
+  });
   client.on('message', (raw) => parser.parse(raw));
   client.setSubscription(JSON.stringify({ type: 'subscribe', symbols }));
   client.connect();

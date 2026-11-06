@@ -16,6 +16,15 @@ export interface ChartGeometry {
   ticks: { yPct: number; price: number }[];
 }
 
+/** A jump in time this much larger than the usual spacing (and at least 5 s) counts as missing data. */
+export function gapThreshold(points: readonly PricePoint[]): number {
+  const steps: number[] = [];
+  for (let i = 1; i < points.length; i++) steps.push((points[i]?.t ?? 0) - (points[i - 1]?.t ?? 0));
+  steps.sort((a, b) => a - b);
+  const median = steps[Math.floor(steps.length / 2)] ?? 0;
+  return Math.max(5000, median * 5);
+}
+
 /** Turns points into an SVG path; null when there is nothing to draw. */
 export function chartGeometry(points: readonly PricePoint[]): ChartGeometry | null {
   const first = points[0];
@@ -37,10 +46,21 @@ export function chartGeometry(points: readonly PricePoint[]): ChartGeometry | nu
     .domain([first.t, last.t === first.t ? first.t + 1 : last.t])
     .range([0, CHART_WIDTH]);
 
+  // Leave a visible gap where data is missing (paused, disconnected) instead
+  // of drawing a straight line that pretends the price moved smoothly.
+  const gapMs = gapThreshold(points);
+  const withGaps: (PricePoint | null)[] = [];
+  points.forEach((pt, i) => {
+    const prev = points[i - 1];
+    if (prev && pt.t - prev.t > gapMs) withGaps.push(null);
+    withGaps.push(pt);
+  });
+
   const path =
-    line<PricePoint>()
-      .x((pt) => x(pt.t))
-      .y((pt) => y(pt.p))(points as PricePoint[]) ?? '';
+    line<PricePoint | null>()
+      .defined((pt) => pt !== null)
+      .x((pt) => x((pt as PricePoint).t))
+      .y((pt) => y((pt as PricePoint).p))(withGaps) ?? '';
 
   return {
     path,
