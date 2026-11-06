@@ -50,6 +50,20 @@ describe('startFeed (in-browser mock market)', () => {
     stop();
   });
 
+  it('reports every incoming batch before batching (for the rate meter)', () => {
+    const store = createQuotesStore();
+    let received = 0;
+    const stop = startFeed({
+      symbols: ['BTC-EUR', 'ETH-EUR'],
+      actions: store.getState(),
+      onReceived: (quotes) => (received += quotes.length),
+      scheduler: timerScheduler,
+    });
+    vi.advanceTimersByTime(1000);
+    expect(received).toBe(200); // default mock rate, counted before coalescing
+    stop();
+  });
+
   it('stop() ends updates and marks the feed paused', () => {
     const store = createQuotesStore();
     const stop = startFeed({ symbols: ['BTC-EUR'], actions: store.getState(), scheduler: timerScheduler });
